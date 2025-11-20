@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Small to Big Image</title>
+
+    <style>
+        body {
+            display: flex;
+            padding: 20px;
+            font-family: Arial;
+        }
+
+        
+        .left {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .left img {
+            width: 120px;
+            height: 90px;
+            cursor: pointer;
+            border: 2px solid gray;
+        }
+
+        
+        .right img {
+            width: 500px;
+            height: 350px;
+            margin-left: 30px;
+            border: 2px solid black;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    
+    <div class="left">
+        <img src="https://picsum.photos/id/1/200/150" onclick="changeImage(this.src)">
+        <img src="https://picsum.photos/id/2/200/150" onclick="changeImage(this.src)">
+        <img src="https://picsum.photos/id/3/200/150" onclick="changeImage(this.src)">
+        <img src="https://picsum.photos/id/4/200/150" onclick="changeImage(this.src)">
+        <img src="https://picsum.photos/id/5/200/150" onclick="changeImage(this.src)">
+    </div>
+
+    
+    <div class="right">
+        <img id="bigImage" src="https://picsum.photos/id/1/500/350">
+    </div>
+
+    
+    <script src="project4.js"></script>
+    
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Image Slider — HTML CSS JS</title>
+  <style>
+    /* ---------- Basic reset ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+    /* ---------- Slider layout ---------- */
+    .slider {
+      position: relative;
+      max-width: 900px;
+      margin: 48px auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      background: #111;
+    }
+
+    .slides {
+      display: flex;                 /* place slides in a row */
+      transition: transform 500ms ease; /* smooth sliding */
+      will-change: transform;
+    }
+
+    .slide {
+      min-width: 100%;              /* each slide fills the slider */
+      user-select: none;
+      -webkit-user-drag: none;
+      position: relative;
+    }
+
+    .slide img {
+      display: block;
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+    }
+
+    /* ---------- Controls ---------- */
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.45);
+      border: none;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-button:hover { background: rgba(0,0,0,0.6); }
+    .nav-prev { left: 14px; }
+    .nav-next { right: 14px; }
+
+    /* ---------- Dots ---------- */
+    .dots {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 14px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms;
+    }
+
+    .dot.active { background: #fff; transform: scale(1.2); }
+
+    /* ---------- Captions ---------- */
+    .caption {
+      position: absolute;
+      left: 20px;
+      bottom: 60px;
+      color: #fff;
+      text-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      max-width: 60%;
+      font-size: 18px;
+      background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.18));
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+
+    /* ---------- Responsive tweaks ---------- */
+    @media (max-width: 720px) {
+      .slide img { height: 360px; }
+      .caption { font-size: 14px; bottom: 66px; max-width: 80%; }
+      .nav-button { padding: 8px 10px; font-size: 16px; }
+    }
+
+    @media (max-width: 420px) {
+      .slide img { height: 260px; }
+      .caption { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slider" id="slider">
+    <div class="slides" id="slides">
+      <div class="slide" data-caption="Mountains at sunrise">
+        <img src="https://picsum.photos/id/1018/1600/900" alt="Mountains" draggable="false">
+        <div class="caption">Mountains at sunrise — peaceful view</div>
+      </div>
+
+      <div class="slide" data-caption="Forest pathway">
+        <img src="https://picsum.photos/id/1015/1600/900" alt="Forest" draggable="false">
+        <div class="caption">Misty forest pathway — calm and green</div>
+      </div>
+
+      <div class="slide" data-caption="City skyline at night">
+        <img src="https://picsum.photos/id/1011/1600/900" alt="City" draggable="false">
+        <div class="caption">City skyline at night — lights & reflections</div>
+      </div>
+
+      <div class="slide" data-caption="Ocean waves">
+        <img src="https://picsum.photos/id/1016/1600/900" alt="Ocean" draggable="false">
+        <div class="caption">Ocean waves hitting the shore</div>
+      </div>
+    </div>
+
+    <!-- Previous / Next buttons -->
+    <button class="nav-button nav-prev" id="prev">❮</button>
+    <button class="nav-button nav-next" id="next">❯</button>
+
+    <!-- Dots -->
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <script>
+    /* ---------- Slider script (vanilla JS) ---------- */
+    (function () {
+      const slidesEl = document.getElementById('slides');
+      const sliderEl = document.getElementById('slider');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const dotsEl = document.getElementById('dots');
+
+      let current = 0;            // index of current slide
+      const total = slides.length;
+      let isMoving = false;       // simple lock for transition
+      let autoplay = true;        // set to false to disable autoplay
+      let interval = 3500;       // autoplay interval in ms
+      let timer = null;
+
+      // create dots
+      slides.forEach((s, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.dataset.index = i;
+        dot.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(dot);
+      });
+
+      // helper: update transform and active dot
+      function update() {
+        slidesEl.style.transform = `translateX(-${current * 100}%)`;
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+      }
+
+      // go to slide
+      function goTo(index) {
+        if (isMoving || index === current) return;
+        isMoving = true;
+        current = (index + total) % total;
+        update();
+        // wait for transition end (slightly longer than CSS transition)
+        setTimeout(() => isMoving = false, 520);
+        resetTimer();
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      nextBtn.addEventListener('click', next);
+      prevBtn.addEventListener('click', prev);
+
+      // keyboard navigation
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') next();
+        if (e.key === 'ArrowLeft') prev();
+      });
+
+      // autoplay
+      function startTimer() {
+        if (!autoplay) return;
+        timer = setInterval(next, interval);
+      }
+      function resetTimer() {
+        if (!autoplay) return;
+        clearInterval(timer);
+        startTimer();
+      }
+      startTimer();
+
+      // pause autoplay while hovering
+      sliderEl.addEventListener('mouseenter', () => clearInterval(timer));
+      sliderEl.addEventListener('mouseleave', () => resetTimer());
+
+      // touch support (swipe)
+      let startX = 0;
+      let deltaX = 0;
+      slidesEl.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        deltaX = 0;
+        clearInterval(timer);
+      }, { passive: true });
+
+      slidesEl.addEventListener('touchmove', (e) => {
+        deltaX = e.touches[0].clientX - startX;
+        // small drag feedback (no overscroll handling)
+        slidesEl.style.transition = 'none';
+        slidesEl.style.transform = `translateX(${ -current * 100 + (deltaX / sliderEl.clientWidth) * 100 }%)`;
+      }, { passive: true });
+
+      slidesEl.addEventListener('touchend', () => {
+        slidesEl.style.transition = '';
+        if (Math.abs(deltaX) > 50) {
+          if (deltaX > 0) prev(); else next();
+        } else {
+          update(); // snap back
+        }
+        resetTimer();
+      });
+
+      // make images non-draggable for nicer UX
+      document.querySelectorAll('img').forEach(img => img.ondragstart = () => false);
+
+      // expose for debugging (optional)
+      window.mySlider = { goTo, next, prev };
+    })();
+  </script>
+</body>
+</html>

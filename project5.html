@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Color Demo</title>
+    <style>
+        #box {
+            width: 550px;
+            height: 650px;
+            border: 2px solid black;
+            margin: 20px auto;
+        }
+
+        #colorInput {
+            width: 250px;
+            padding: 8px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        button{
+            padding: 8px 15px;
+            display: block;
+            width: 250px;
+            margin: 6px auto;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TV Box -->
+    <div id="box"></div>
+
+    <!-- Input -->
+    <input type="text" id="colorInput" placeholder="Enter color">
+
+    <!-- Buttons -->
+    <button onclick="changeBox()">Change Box Color</button>
+    <button onclick="changeBg()">Change Background</button>
+
+    <script src="project5.js"></script>
+
+</body>
+</html>
