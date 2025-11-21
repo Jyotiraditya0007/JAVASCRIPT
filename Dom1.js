@@ -8,13 +8,18 @@ let pradip=()=> {
 
 let jyoti=()=> {
 
-    let text = document.querySelector('#inp').Value 
+    let text = document.querySelector('#inp').value 
 
-    alert(`Welcome ${text}`)
+    //alert(`Welcome ${text}`)
 
+
+
+if (text % 2 ==0) 
+{
+    alert(`Even Number: ${text}`);
+    }else{
+    alert(`Odd Number: ${text}`);
+}
 }
 
-let vivek=()=> {
 
-    
-}
