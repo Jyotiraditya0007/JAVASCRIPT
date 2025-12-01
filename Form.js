@@ -1,5 +1,5 @@
 
-let valid=()=> {
+let signup=()=> {
 
     let Name= document.querySelector('#name').value.trim()
     let Num= document.querySelector('#num').value.trim()
@@ -83,14 +83,37 @@ let valid=()=> {
 
     else {
 
-        Errnum.innerHTML="Please enter Cpass"
-        Errname.style.color="red"
-        return false
+        
     }
 
+localStorage.setItem("Name", Name)
+localStorage.setItem("Number", Num)
+localStorage.setItem("email", Email)
+localStorage.setItem("password", Pass)
+
+location.href="Login.html"
+return false
 
 
+}
 
-    
+let login=()=>{
+
+    let loginname= document.querySelector('#loginname').value.trim()
+    let loginpass= document.querySelector('#loginpass').value.trim()
+
+    let localname= localStorage.getItem('name')
+    let localpass= localStorage.getItem('password')
+
+     if(loginname==localname && localpass==loginpass){
+
+        location.href="Home.html"
+        return false
+     }
+     else{
+        alert("Invalid credentials")
+        return false
+
+     }
 
 }

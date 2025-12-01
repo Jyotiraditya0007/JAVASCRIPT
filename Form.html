@@ -4,6 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        
+    body {
+        background: #0d1117; 
+        font-family: Arial, sans-serif;
+        color: #fff;
+    }
+
+    form {
+        width: 350px;
+        margin: 40px auto;
+        padding: 25px;
+        border-radius: 10px;
+        background: #161b22;
+        box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+        border: 1px solid #30363d;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        width: 95%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 2px solid #2387eb;
+        border-radius: 5px;
+        background: #0d1117;
+        color: #ffffff;
+        font-size: 15px;
+    }
+
+    input[type="text"]:focus {
+        border-color: #00d9ff;
+        box-shadow: 0 0 8px #00d9ff;
+        outline: none;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background: #2387eb;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+        color: white;
+        transition: 0.3s;
+    }
+
+    input[type="submit"]:hover {
+        background: #00aaff;
+        box-shadow: 0 0 10px #00aaff;
+    }
+
+    p {
+        color: rgb(255, 90, 90);
+        font-size: 13px;
+        margin: 0;
+        height: 15px;
+    }
+</style>
+
+
 </head>
 <body>
 
@@ -24,7 +87,7 @@
         <p id="errcpass"></p>
         Enter C Password : <input type="text" id="cpass"> <br> </br>
 
-        <input type="submit" onclick="return valid()">
+        <input type="submit" value="sign up" onclick="return signup()">
 
     </form>
 
